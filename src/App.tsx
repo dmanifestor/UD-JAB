@@ -6,342 +6,25 @@
 import React, { useState, useEffect } from 'react';
 import {
   Search,
-  Package,
   Plane,
   Clock,
   AlertTriangle,
-  CheckCircle2,
-  MapPin,
   FileText,
   Printer,
   Share2,
-  ExternalLink,
   ShieldAlert,
   ArrowRight,
-  Truck,
-  RotateCcw,
   SlidersHorizontal,
-  Phone,
-  Mail,
-  User,
   Check,
   UploadCloud,
   X
 } from 'lucide-react';
-
-interface Stage {
-  title: string;
-  completed: boolean;
-  current?: boolean;
-  isHold?: boolean;
-  timestamp: string;
-}
-
-interface TimelineEvent {
-  date: string;
-  time: string;
-  location: string;
-  status: string;
-  detail: string;
-  badge: string;
-}
-
-interface ParcelData {
-  parcel_id: string;
-  tracking_code: string;
-  service_type: string;
-  status: 'in_transit' | 'on_hold' | 'out_for_delivery' | 'delivered';
-  status_label: string;
-  status_detail: string;
-  origin: {
-    city: string;
-    country: string;
-    facility: string;
-  };
-  destination: {
-    city: string;
-    country: string;
-    address: string;
-    recipient: string;
-  };
-  sender: {
-    name: string;
-    city: string;
-    country: string;
-  };
-  specs: {
-    weight: string;
-    dimensions: string;
-    pieces: number;
-    declared_value: string;
-    service_class: string;
-    signature_required: boolean;
-    insurance: string;
-  };
-  estimated_delivery: {
-    date: string;
-    time_window: string;
-  };
-  stages: Stage[];
-  timeline: TimelineEvent[];
-  hold_info?: {
-    location: string;
-    hold_code: string;
-    authority: string;
-    reason: string;
-    hold_timestamp: string;
-    contact_officer: string;
-    contact_phone: string;
-    contact_email: string;
-    clearance_fee: string;
-  };
-}
-
-const INITIAL_PARCELS: Record<string, ParcelData> = {
-  DELI01474: {
-    parcel_id: 'DELI01474',
-    tracking_code: 'DELI01474',
-    service_type: 'Apex Priority Global Air Express',
-    status: 'in_transit',
-    status_label: 'Package is on its way',
-    status_detail:
-      'Your parcel is traveling via international air freight aboard flight APX-9481 from Frankfurt Hub to Cairo Delivery Gateway. Customs export inspection cleared with zero exceptions.',
-    origin: {
-      city: 'Frankfurt',
-      country: 'Germany',
-      facility: 'Frankfurt Cargo Gateway Hub (FRA-T4)',
-    },
-    destination: {
-      city: 'Cairo',
-      country: 'Egypt',
-      address: 'Apex Express Metro Depot, New Cairo Logistics Park',
-      recipient: 'Joel Dan (Apex Priority Recipient)',
-    },
-    sender: {
-      name: 'Technik Precision GmbH',
-      city: 'Frankfurt am Main',
-      country: 'Germany',
-    },
-    specs: {
-      weight: '4.85 kg (10.69 lbs)',
-      dimensions: '34 × 22 × 15 cm',
-      pieces: 1,
-      declared_value: '$1,250.00 USD',
-      service_class: 'Tier-1 Express Air Courier',
-      signature_required: true,
-      insurance: 'Full Transit Cargo Protection',
-    },
-    estimated_delivery: {
-      date: 'September 26, 2026',
-      time_window: '14:00 - 18:30 (Local Time)',
-    },
-    stages: [
-      { title: 'Picked Up', completed: true, timestamp: 'Sept 21, 14:15 CET' },
-      { title: 'Export Customs', completed: true, timestamp: 'Sept 21, 21:40 CET' },
-      { title: 'In International Transit', current: true, completed: false, timestamp: 'Sept 22, 07:15 UTC' },
-      { title: 'Import Customs', completed: false, timestamp: 'Estimated Sept 24' },
-      { title: 'Final Delivery', completed: false, timestamp: 'Estimated Sept 26' },
-    ],
-    timeline: [
-      {
-        date: 'Sep 22, 2026',
-        time: '07:15 UTC',
-        location: 'Airspace Mediterranean Corridor - Flight APX-9481',
-        status: 'In Air Transit - Package is on its way',
-        detail:
-          'Aircraft cruising altitude FL380. Package secured in container ULD-APX-9941B. Transponder telemetry verified on schedule.',
-        badge: 'Active',
-      },
-      {
-        date: 'Sep 22, 2026',
-        time: '04:30 CET',
-        location: 'Frankfurt Airport (FRA), Germany',
-        status: 'Loaded onto Outbound Aircraft',
-        detail: 'Pallet consolidated and scanned into air manifest APX-9481 by Ground Cargo Ops.',
-        badge: 'Completed',
-      },
-      {
-        date: 'Sep 21, 2026',
-        time: '21:40 CET',
-        location: 'Frankfurt Cargo Gateway, Germany',
-        status: 'Export Customs Cleared',
-        detail: 'Export clearance inspection completed and approved by Officer FRA-CUST-12.',
-        badge: 'Completed',
-      },
-      {
-        date: 'Sep 21, 2026',
-        time: '14:15 CET',
-        location: 'Technik Logistics Depot, Frankfurt, Germany',
-        status: 'Collected by Apex Courier',
-        detail: 'Consignment collected from sender; tracking number DELI01474 registered in global system.',
-        badge: 'Completed',
-      },
-    ],
-  },
-  DELI08821: {
-    parcel_id: 'DELI08821',
-    tracking_code: 'DELI08821',
-    service_type: 'Apex Global Express Freight',
-    status: 'on_hold',
-    status_label: 'Package is on hold in Egypt',
-    status_detail:
-      'Shipment is temporarily held at Cairo International Cargo Terminal 2 under Egyptian Customs Authority detention protocol ECA-41 pending commercial duty assessment.',
-    origin: {
-      city: 'Rotterdam',
-      country: 'Netherlands',
-      facility: 'Rotterdam North Intermodal Port',
-    },
-    destination: {
-      city: 'Cairo',
-      country: 'Egypt',
-      address: 'Apex Consignee Station, Heliopolis, Cairo',
-      recipient: 'Joel Dan / Priority Consignee',
-    },
-    sender: {
-      name: 'Nordic Logistics BV',
-      city: 'Rotterdam',
-      country: 'Netherlands',
-    },
-    specs: {
-      weight: '7.40 kg (16.31 lbs)',
-      dimensions: '48 × 30 × 24 cm',
-      pieces: 2,
-      declared_value: '$2,400.00 USD',
-      service_class: 'Heavy Commercial Express Freight',
-      signature_required: true,
-      insurance: 'Secured Freight Transit Tier-2',
-    },
-    estimated_delivery: {
-      date: 'Pending Customs Release',
-      time_window: 'Upon Form ECA-41 Clearance',
-    },
-    hold_info: {
-      location: 'Cairo International Airport Air Cargo Terminal 2, Inspection Bay B-4, Cairo, Egypt',
-      hold_code: 'EGY-GOV-CUST-883',
-      authority: 'Egyptian Customs Authority (ECA) - Air Cargo Import Directorate',
-      reason:
-        'Detained for formal commercial tariff classification and importer identification validation (Form ECA-41).',
-      hold_timestamp: 'Sep 22, 2026 · 09:15 UTC+2',
-      contact_officer: 'Officer Tariq Al-Farouk (Badge #ECA-771)',
-      contact_phone: '+20 2 2265 0000 (Ext 4120)',
-      contact_email: 'clearance-cairo@apex-logistics.eg',
-      clearance_fee: 'EGP 1,450 (~$30.00 USD)',
-    },
-    stages: [
-      { title: 'Picked Up', completed: true, timestamp: 'Sept 20, 11:20 CET' },
-      { title: 'Departed Hub', completed: true, timestamp: 'Sept 21, 02:45 CET' },
-      { title: 'Held at Customs in Egypt', current: true, isHold: true, completed: false, timestamp: 'Sept 22, 09:15 UTC+2' },
-      { title: 'Clearance Release', completed: false, timestamp: 'Pending Consignee Action' },
-      { title: 'Delivered', completed: false, timestamp: 'Awaiting Release' },
-    ],
-    timeline: [
-      {
-        date: 'Sep 22, 2026',
-        time: '09:15 UTC+2',
-        location: 'Cairo International Airport (CAI), Egypt',
-        status: 'Held by Egyptian Customs Authority',
-        detail:
-          'Package flagged during incoming optical scanner inspection. Notice issued: Mandatory import valuation review required (Code EGY-GOV-CUST-883).',
-        badge: 'On Hold',
-      },
-      {
-        date: 'Sep 21, 2026',
-        time: '18:30 UTC+2',
-        location: 'Cairo International Airport (CAI), Egypt',
-        status: 'Arrived at Cairo Inbound Hub',
-        detail: 'Unloaded from flight MS-782 at Terminal 2 Cargo Village. Routed to bonded inspection zone.',
-        badge: 'Arrived',
-      },
-      {
-        date: 'Sep 21, 2026',
-        time: '02:45 CET',
-        location: 'Schiphol Cargo Airport, Amsterdam',
-        status: 'Departed International Gateway',
-        detail: 'Dispatched via scheduled cargo flight to Cairo International Airport.',
-        badge: 'Completed',
-      },
-    ],
-  },
-  EGYP99402: {
-    parcel_id: 'EGYP99402',
-    tracking_code: 'EGYP99402',
-    service_type: 'Apex Priority Cargo Transit',
-    status: 'on_hold',
-    status_label: 'Package is on hold in Egypt',
-    status_detail:
-      'Shipment is held at Cairo Airport Customs Village pending consignee identity verification and payment of administrative import clearance stamp.',
-    origin: {
-      city: 'London',
-      country: 'UK',
-      facility: 'Heathrow Cargo Center (LHR)',
-    },
-    destination: {
-      city: 'Cairo',
-      country: 'Egypt',
-      address: 'Apex Consignee Station, Zamalek, Cairo',
-      recipient: 'Joel Dan / Regional Delivery',
-    },
-    sender: {
-      name: 'Thames Industrial Supply',
-      city: 'London',
-      country: 'UK',
-    },
-    specs: {
-      weight: '3.20 kg',
-      dimensions: '28 × 18 × 12 cm',
-      pieces: 1,
-      declared_value: '$890.00 USD',
-      service_class: 'Express Priority Cargo',
-      signature_required: true,
-      insurance: 'Standard Cargo Protection',
-    },
-    estimated_delivery: {
-      date: 'Pending Clearance Release',
-      time_window: 'Upon Customs Release Protocol',
-    },
-    hold_info: {
-      location: 'Cairo International Airport Air Cargo Terminal 2, Customs Inspection Bay B-4, Cairo, Egypt',
-      hold_code: 'EGY-GOV-CUST-883',
-      authority: 'Egyptian Customs Authority (ECA)',
-      reason: 'Held for statutory import tariff verification and Form ECA-41 endorsement.',
-      hold_timestamp: 'Sep 22, 2026 · 09:15 UTC+2',
-      contact_officer: 'Officer Tariq Al-Farouk (Badge #ECA-771)',
-      contact_phone: '+20 2 2265 0000 (Ext 4120)',
-      contact_email: 'clearance-cairo@apex-logistics.eg',
-      clearance_fee: 'EGP 1,450 (~$30.00 USD)',
-    },
-    stages: [
-      { title: 'Picked Up', completed: true, timestamp: 'Sept 20' },
-      { title: 'Departed London', completed: true, timestamp: 'Sept 21' },
-      { title: 'Held at Customs in Egypt', current: true, isHold: true, completed: false, timestamp: 'Sept 22' },
-      { title: 'Clearance Release', completed: false, timestamp: 'Pending Action' },
-      { title: 'Delivered', completed: false, timestamp: 'Awaiting Release' },
-    ],
-    timeline: [
-      {
-        date: 'Sep 22, 2026',
-        time: '09:15 UTC+2',
-        location: 'Cairo International Airport (CAI), Egypt',
-        status: 'Held by Egyptian Customs Authority',
-        detail: 'Consignment flagged for duty assessment under code EGY-GOV-CUST-883.',
-        badge: 'On Hold',
-      },
-    ],
-  },
-};
+import { ParcelData, ParcelStatus } from './types';
+import { INITIAL_PARCELS } from './data/initialParcels';
+import { useParcelReducer } from './hooks/useParcelReducer';
 
 export default function App() {
-  const [parcels, setParcels] = useState<Record<string, ParcelData>>(() => {
-    try {
-      const stored = localStorage.getItem('apex_parcels_db');
-      if (stored) {
-        return JSON.parse(stored);
-      }
-    } catch {
-      // fallback
-    }
-    return INITIAL_PARCELS;
-  });
+  const { parcels, setStatus, releaseHold, addParcel, resetParcels } = useParcelReducer();
 
   const [inputCode, setInputCode] = useState('');
   const [activeCode, setActiveCode] = useState('DELI01474');
@@ -351,7 +34,7 @@ export default function App() {
   // Dispatcher controls state
   const [dispatcherPin, setDispatcherPin] = useState('APEX-DISPATCH-990');
   const [targetParcelSelect, setTargetParcelSelect] = useState('DELI01474');
-  const [newStatusSelect, setNewStatusSelect] = useState<'in_transit' | 'on_hold' | 'out_for_delivery' | 'delivered'>('in_transit');
+  const [newStatusSelect, setNewStatusSelect] = useState<ParcelStatus>('in_transit');
   const [statusLog, setStatusLog] = useState('');
 
   // Customs clearance upload modal
@@ -380,7 +63,7 @@ export default function App() {
   useEffect(() => {
     const parseHash = () => {
       const hash = window.location.hash || '';
-      
+
       // Default to /#track when hash is empty or explicitly #track / #/track
       if (!hash || hash === '#' || hash === '#/' || hash === '#track' || hash === '#/track') {
         setActiveTab('track');
@@ -427,19 +110,10 @@ export default function App() {
     parseHash();
     window.addEventListener('hashchange', parseHash);
     return () => window.removeEventListener('hashchange', parseHash);
-  }, [parcels]);
-
-  // Sync state to localStorage whenever it changes
-  useEffect(() => {
-    try {
-      localStorage.setItem('apex_parcels_db', JSON.stringify(parcels));
-    } catch {
-      // ignore
-    }
-  }, [parcels]);
+  }, [parcels, activeCode]);
 
   // Current selected parcel
-  const currentParcel = parcels[activeCode] || parcels['DELI01474'];
+  const currentParcel = parcels[activeCode] || parcels['DELI01474'] || INITIAL_PARCELS['DELI01474'];
 
   const showToast = (msg: string) => {
     setNotification(msg);
@@ -479,7 +153,7 @@ export default function App() {
       return;
     }
 
-    // When parcel code is entered correctly, create entry and immediately load to the result page
+    // When parcel code is entered correctly, create entry immutably and load to result view
     const base = parcels['DELI01474'] || INITIAL_PARCELS['DELI01474'];
     const customParcel: ParcelData = {
       ...base,
@@ -488,12 +162,11 @@ export default function App() {
       status: 'in_transit',
       status_label: 'Package is on its way',
       status_detail: `Consignment ${clean} is traveling via Apex Priority Global Air Express aboard flight APX-9481 from Frankfurt Hub to Cairo Delivery Gateway. Customs export inspection cleared with zero exceptions.`,
+      stages: base.stages.map((stage) => ({ ...stage })),
+      timeline: base.timeline.map((event) => ({ ...event })),
     };
 
-    setParcels((prev) => ({
-      ...prev,
-      [clean]: customParcel,
-    }));
+    addParcel(clean, customParcel);
     navigateTo('result', clean);
   };
 
@@ -506,73 +179,30 @@ export default function App() {
       return;
     }
 
-    const updated = { ...parcels };
-    const p = updated[targetParcelSelect];
-    if (p) {
-      p.status = newStatusSelect;
-      if (newStatusSelect === 'in_transit') {
-        p.status_label = 'Package is on its way';
-        p.status_detail =
-          'Your parcel is currently in international air transit aboard flight APX-9481 and moving on schedule toward the delivery hub.';
-        p.stages[2].current = true;
-        p.stages[2].isHold = false;
-        p.stages[2].title = 'In International Transit';
-      } else if (newStatusSelect === 'on_hold') {
-        p.status_label = 'Package is on hold in Egypt';
-        p.status_detail =
-          'Shipment is temporarily held at Cairo International Cargo Terminal 2 under Egyptian Customs Authority inspection protocol ECA-41.';
-        p.stages[2].current = true;
-        p.stages[2].isHold = true;
-        p.stages[2].title = 'Held at Customs in Egypt';
-        if (!p.hold_info) {
-          p.hold_info = {
-            location: 'Cairo International Airport Air Cargo Terminal 2, Inspection Bay B-4, Cairo, Egypt',
-            hold_code: 'EGY-GOV-CUST-883',
-            authority: 'Egyptian Customs Authority (ECA)',
-            reason: 'Held for statutory import tariff verification and Form ECA-41 endorsement.',
-            hold_timestamp: 'Sep 22, 2026 · 09:15 UTC+2',
-            contact_officer: 'Officer Tariq Al-Farouk (Badge #ECA-771)',
-            contact_phone: '+20 2 2265 0000 (Ext 4120)',
-            contact_email: 'clearance-cairo@apex-logistics.eg',
-            clearance_fee: 'EGP 1,450 (~$30.00 USD)',
-          };
-        }
-      }
-
-      setParcels(updated);
-      showToast(`Status updated: ${targetParcelSelect} is now '${newStatusSelect}'.`);
-      setStatusLog(`Updated ${targetParcelSelect} to ${newStatusSelect} at ${new Date().toLocaleTimeString()}`);
+    const target = targetParcelSelect;
+    if (parcels[target]) {
+      setStatus(target, newStatusSelect, dispatcherPin.trim());
+      showToast(`Status updated: ${target} is now '${newStatusSelect}'.`);
+      setStatusLog(`Updated ${target} to ${newStatusSelect} at ${new Date().toLocaleTimeString()}`);
 
       // Auto-route active view to the updated status via hash
-      if (activeCode === targetParcelSelect) {
+      if (activeCode === target) {
         if (newStatusSelect === 'on_hold') {
-          navigateTo('on_hold', targetParcelSelect);
+          navigateTo('on_hold', target);
         } else {
-          navigateTo('result', targetParcelSelect);
+          navigateTo('result', target);
         }
       }
     }
   };
 
   const releaseEgyptHold = () => {
-    const updated = { ...parcels };
-    const p = updated[activeCode] || updated['DELI08821'];
-    if (p) {
-      p.status = 'in_transit';
-      p.status_label = 'Package is on its way';
-      p.status_detail =
-        'Customs clearance approved by Officer Tariq Al-Farouk. Package released from Cairo Cargo Terminal 2 and is on its way to final destination.';
-      p.stages[2].isHold = false;
-      p.stages[2].completed = true;
-      p.stages[3].completed = true;
-      p.stages[3].timestamp = 'Released Today';
-      p.estimated_delivery.date = 'Tomorrow, September 23, 2026';
-      setParcels(updated);
-      setShowDocsModal(false);
-      setDocsSubmitted(false);
-      showToast(`Customs hold lifted! Consignment ${p.tracking_code} is now on its way.`);
-      navigateTo('result', p.tracking_code);
-    }
+    const targetCode = activeCode in parcels ? activeCode : 'DELI08821';
+    releaseHold(targetCode);
+    setShowDocsModal(false);
+    setDocsSubmitted(false);
+    showToast(`Customs hold lifted! Consignment ${targetCode} is now on its way.`);
+    navigateTo('result', targetCode);
   };
 
   return (
@@ -657,7 +287,6 @@ export default function App() {
 
       {/* Main View Switcher */}
       <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
         {/* VIEW 1: SEARCH / TRACK CONSIGNMENT VIEW */}
         {activeTab === 'track' && (
           <div className="space-y-12">
@@ -779,9 +408,9 @@ export default function App() {
                   </div>
 
                   <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase flex flex-wrap items-center gap-3">
-                    <span>Package is on its way</span>
+                    <span>{currentParcel.status === 'in_transit' ? 'Package is on its way' : currentParcel.status_label}</span>
                     <span className="inline-flex items-center px-3 py-1 bg-orange-500 text-black text-xs font-black rounded-sm uppercase tracking-wider">
-                      IN TRANSIT
+                      {currentParcel.status.replace('_', ' ')}
                     </span>
                   </h1>
 
@@ -1012,7 +641,7 @@ export default function App() {
                     </button>
                     <button
                       onClick={() => {
-                        navigator.clipboard.writeText(window.location.origin + '/#/result?code=' + currentParcel.tracking_code);
+                        navigator.clipboard.writeText(window.location.origin + '/#result?code=' + currentParcel.tracking_code);
                         showToast('Direct waybill link copied to clipboard!');
                       }}
                       className="w-full py-2.5 bg-[#1b1e22] hover:bg-[#252a2f] text-white text-xs font-bold uppercase tracking-wider rounded-sm border border-[#2e3338] transition-colors flex items-center justify-center gap-2 cursor-pointer"
@@ -1418,7 +1047,7 @@ export default function App() {
                     <label className="block text-zinc-400 mb-1 font-semibold uppercase">Set New Status</label>
                     <select
                       value={newStatusSelect}
-                      onChange={(e) => setNewStatusSelect(e.target.value as any)}
+                      onChange={(e) => setNewStatusSelect(e.target.value as ParcelStatus)}
                       className="w-full bg-[#0a0b0d] border border-[#2b3036] px-3 py-2.5 rounded text-white font-mono focus:border-orange-500 focus:outline-none"
                     >
                       <option value="in_transit">in_transit &mdash; Package is on its way (result.html)</option>
@@ -1439,8 +1068,7 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => {
-                      localStorage.removeItem('apex_parcels_db');
-                      setParcels(INITIAL_PARCELS);
+                      resetParcels();
                       showToast('Database reset to defaults.');
                     }}
                     className="px-3 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-semibold rounded cursor-pointer"

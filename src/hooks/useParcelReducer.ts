@@ -3,16 +3,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useReducer } from 'react';
+import { useReducer, useEffect, useCallback } from 'react';
 import { ParcelData, ParcelAction, ParcelStatus, Stage } from '../types';
 import { INITIAL_PARCELS } from '../data/initialParcels';
 import { addAuditLogEntry } from '../utils/auditService';
+
+const STORAGE_KEY = 'apex_parcels_db';
 
 /**
  * Pure reducer for parcel state management.
  * All updates are immutable - creates new objects instead of mutating existing ones.
  */
-function parcelReducer(
+export function parcelReducer(
   state: Record<string, ParcelData>,
   action: ParcelAction
 ): Record<string, ParcelData> {
@@ -34,7 +36,7 @@ function parcelReducer(
           { title: 'Picked Up', completed: true, timestamp: 'Sept 21, 14:15 CET' },
           { title: 'Export Customs', completed: true, timestamp: 'Sept 21, 21:40 CET' },
           {
-            title: 'In Air Transit',
+            title: 'In International Transit',
             current: true,
             completed: false,
             isHold: false,
@@ -51,7 +53,7 @@ function parcelReducer(
           { title: 'Picked Up', completed: true, timestamp: 'Sept 21, 14:15 CET' },
           { title: 'Export Customs', completed: true, timestamp: 'Sept 21, 21:40 CET' },
           {
-            title: 'Customs Hold (Egypt)',
+            title: 'Held at Customs in Egypt',
             current: true,
             completed: false,
             isHold: true,
@@ -79,7 +81,7 @@ function parcelReducer(
       } else if (nextStatus === 'delivered') {
         label = 'Delivered & Signed';
         detail =
-          'Consignment DELI01474 successfully delivered to Joel Dan at Apex Express Metro Depot, New Cairo Logistics Park. Official delivery receipt signed with biometric verification.';
+          `Consignment ${parcel.tracking_code} successfully delivered to Joel Dan at Apex Express Metro Depot, New Cairo Logistics Park. Official delivery receipt signed with biometric verification.`;
         updatedStages = [
           { title: 'Picked Up', completed: true, timestamp: 'Sept 21, 14:15 CET' },
           { title: 'Export Customs', completed: true, timestamp: 'Sept 21, 21:40 CET' },
@@ -94,7 +96,6 @@ function parcelReducer(
         ];
       }
 
-      // Immutable update: create new parcel object
       const updatedParcel: ParcelData = {
         ...parcel,
         status: nextStatus,
@@ -117,14 +118,6 @@ function parcelReducer(
             : parcel.hold_info,
       };
 
-      // Log audit entry asynchronously
-      const prevStatus = parcel.status;
-      addAuditLogEntry(action.code, nextStatus, prevStatus, {
-        keyUsed: nextStatus === 'on_hold' ? 'EGY-CUST-AUTH-41' : 'APEX-DISPATCH-990',
-      }).catch(() => {
-        // Silently handle audit log errors
-      });
-
       return {
         ...state,
         [action.code]: updatedParcel,
@@ -138,12 +131,12 @@ function parcelReducer(
       // Immutable stage update using .map()
       const releasedStages = parcel.stages.map((stage, index) => {
         if (index === 2) {
-          return { ...stage, isHold: false, completed: true };
+          return { ...stage, isHold: false, completed: true, current: false };
         }
         if (index === 3) {
           return { ...stage, completed: true, timestamp: 'Released Today' };
         }
-        return stage;
+        return { ...stage };
       });
 
       const releasedParcel: ParcelData = {
@@ -159,15 +152,6 @@ function parcelReducer(
         },
       };
 
-      // Log audit entry
-      addAuditLogEntry(action.code, 'in_transit', 'on_hold', {
-        keyUsed: 'EGY-CUST-AUTH-41',
-        reason:
-          'Customs quarantine detention released. Form ECA-41 verified and clearance fee receipt confirmed by Officer Tariq Al-Farouk.',
-      }).catch(() => {
-        // Silently handle audit log errors
-      });
-
       return {
         ...state,
         [action.code]: releasedParcel,
@@ -177,7 +161,7 @@ function parcelReducer(
     case 'ADD_PARCEL': {
       return {
         ...state,
-        [action.code]: action.parcel,
+        [action.code]: { ...action.parcel },
       };
     }
 
@@ -189,7 +173,6 @@ function parcelReducer(
       const curIndex = sequence.indexOf(parcel.status);
       const nextStatus = sequence[(curIndex + 1) % sequence.length];
 
-      // Delegate to SET_STATUS for consistency
       return parcelReducer(state, {
         type: 'SET_STATUS',
         code: action.code,
@@ -207,6 +190,69 @@ function parcelReducer(
   }
 }
 
+function getInitialParcels(): Record<string, ParcelData> {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const stored = window.localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        return JSON.parse(stored);
+      }
+    }
+  } catch {
+    // fallback
+  }
+  return INITIAL_PARCELS;
+}
+
+/**
+ * Custom hook providing parcels state and immutable actions.
+ * Manages localStorage persistence and audit logging as side-effects outside UI rendering.
+ */
 export function useParcelReducer() {
-  return useReducer(parcelReducer, INITIAL_PARCELS);
+  const [state, dispatch] = useReducer(parcelReducer, undefined, getInitialParcels);
+
+  // Synchronize state to localStorage
+  useEffect(() => {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      }
+    } catch {
+      // ignore
+    }
+  }, [state]);
+
+  const setStatus = useCallback((code: string, status: ParcelStatus, keyUsed = 'APEX-DISPATCH-990') => {
+    const prevStatus = state[code]?.status;
+    dispatch({ type: 'SET_STATUS', code, status });
+    if (prevStatus && prevStatus !== status) {
+      addAuditLogEntry(code, status, prevStatus, { keyUsed }).catch(() => {});
+    }
+  }, [state]);
+
+  const releaseHold = useCallback((code: string) => {
+    dispatch({ type: 'RELEASE_HOLD', code });
+    addAuditLogEntry(code, 'in_transit', 'on_hold', {
+      keyUsed: 'EGY-CUST-AUTH-41',
+      reason:
+        'Customs quarantine detention released. Form ECA-41 verified and clearance fee receipt confirmed by Officer Tariq Al-Farouk.',
+    }).catch(() => {});
+  }, []);
+
+  const addParcel = useCallback((code: string, parcel: ParcelData) => {
+    dispatch({ type: 'ADD_PARCEL', code, parcel });
+  }, []);
+
+  const resetParcels = useCallback(() => {
+    dispatch({ type: 'RESET' });
+  }, []);
+
+  return {
+    parcels: state,
+    dispatch,
+    setStatus,
+    releaseHold,
+    addParcel,
+    resetParcels,
+  };
 }
