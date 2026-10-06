@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APEXEXPRESS | Egypt Customs Quarantine Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #0c0d0e;
+      color: #ffffff;
+    }
+    .font-mono-data {
+      font-family: 'JetBrains Mono', monospace;
+      font-variant-numeric: tabular-nums;
+    }
+    .orange-gradient {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    }
+    .glass-card {
+      background-color: #141618;
+      border: 1px solid #23272b;
+    }
+    .caution-stripe {
+      background: repeating-linear-gradient(
+        -45deg,
+        #f97316,
+        #f97316 12px,
+        #000000 12px,
+        #000000 24px
+      );
+    }
+    @media print {
+      body { background-color: #ffffff; color: #000000; }
+      header, footer, .no-print { display: none !important; }
+      .glass-card { border: 1px solid #cccccc; background: #ffffff !important; color: #000000 !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-orange-500 selection:text-white">
+
+  <!-- Top Bar Contract -->
+  <header class="w-full bg-[#111214] border-b border-[#23272b] sticky top-0 z-50 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+      <a href="track.html" class="flex items-center gap-3 group">
+        <div class="w-9 h-9 orange-gradient rounded-sm flex items-center justify-center font-black text-black text-lg tracking-tighter">
+          ▲
+        </div>
+        <div class="flex flex-col">
+          <span class="text-lg font-extrabold tracking-tight text-white uppercase group-hover:text-orange-400 transition-colors">
+            APEX<span class="text-orange-500">EXPRESS</span>
+          </span>
+          <span class="text-[10px] tracking-widest text-zinc-400 uppercase -mt-1 font-mono-data">GLOBAL COURIER & FREIGHT</span>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-300">
+        <a href="/#track" class="hover:text-orange-400 transition-colors">&larr; Track Consignment</a>
+        <a href="/#result" class="hover:text-white transition-colors">Transit Monitor</a>
+        <a href="/#on-hold" class="text-amber-400 font-semibold transition-colors">Egypt Customs Inspection</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <button id="open-release-modal-btn" class="px-3.5 py-1.5 bg-orange-500 hover:bg-orange-400 text-black text-xs font-bold uppercase tracking-wider rounded-sm transition-colors flex items-center gap-2 shadow-md shadow-orange-500/20">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Resolve Customs Hold
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Caution Strip -->
+  <div class="h-2 w-full caution-stripe no-print"></div>
+
+  <!-- Main Content Area -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Breadcrumb -->
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-6 text-xs text-zinc-400 no-print">
+      <div class="flex items-center gap-2">
+        <a href="track.html" class="hover:text-white">Apex Hub</a>
+        <span>/</span>
+        <span>Customs Retention</span>
+        <span>/</span>
+        <span class="text-amber-400 font-mono-data font-semibold">CAI-T2 (Egypt)</span>
+        <span>/</span>
+        <span class="text-white font-mono-data font-semibold" id="top-code-breadcrumb">DELI08821</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="inline-block w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping"></span>
+        <span class="font-mono-data text-amber-300 font-semibold">Port Status: Active Customs Hold Flagged</span>
+      </div>
+    </div>
+
+    <!-- Master Alert Banner: Package On Hold in Egypt -->
+    <section class="glass-card rounded-sm p-6 sm:p-8 mb-8 border-l-4 border-l-amber-500 bg-[#161412] relative overflow-hidden">
+      <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div>
+          <!-- Unboxed metadata -->
+          <div class="flex items-center gap-3 text-xs text-zinc-400 mb-2 font-mono-data">
+            <span class="text-amber-400 font-bold tracking-wider">AIR WAYBILL # <span id="display-tracking-code">DELI08821</span></span>
+            <span aria-hidden="true">&middot;</span>
+            <span class="text-zinc-300">Port of Cairo (CAI)</span>
+            <span aria-hidden="true">&middot;</span>
+            <span class="text-red-400 font-semibold">Detention Code: EGY-GOV-CUST-883</span>
+          </div>
+
+          <!-- Primary Headline -->
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase flex flex-wrap items-center gap-3">
+            <span>Package is on hold in Egypt</span>
+            <span class="inline-flex items-center justify-center px-3 py-1 bg-amber-500 text-black text-xs font-black rounded-sm uppercase tracking-wider">
+              ON HOLD (CAIRO)
+            </span>
+          </h1>
+
+          <p class="mt-3 text-sm sm:text-base text-zinc-300 max-w-3xl leading-relaxed" id="hold-description-text">
+            Consignment has been detained at <strong>Cairo International Airport Cargo Village (Terminal 2)</strong> by the <strong>Egyptian Customs Authority (ECA)</strong>. Release is temporarily suspended pending import tariff calculation and consignee Form ECA-41 documentation.
+          </p>
+        </div>
+
+        <!-- Detention Status Action Box -->
+        <div class="bg-[#0c0b0a] border border-amber-500/40 p-5 rounded-sm lg:min-w-[300px] shrink-0">
+          <div class="text-[11px] uppercase tracking-wider text-amber-400 font-bold flex items-center gap-2">
+            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            Detention Order Notice
+          </div>
+          <div class="text-lg font-black text-white mt-1 font-mono-data">
+            ECA Terminal 2 Hold
+          </div>
+          <div class="text-xs text-zinc-400 mt-1 font-mono-data">
+            Location: Bay B-4, Cairo Airport
+          </div>
+          <div class="mt-3 pt-3 border-t border-[#23272b] flex items-center justify-between text-xs font-mono-data">
+            <span class="text-zinc-400">Clearance Fee:</span>
+            <span class="text-amber-400 font-bold">EGP 1,450 (~$30)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stepper with Egyptian Hold Stage -->
+      <div class="mt-8 pt-6 border-t border-[#2a2622]">
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+          <!-- Step 1 -->
+          <div class="flex flex-col">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 rounded-full bg-orange-500 text-black font-extrabold flex items-center justify-center text-xs">✓</div>
+              <div class="h-1 flex-grow bg-orange-500 rounded-full"></div>
+            </div>
+            <span class="text-xs font-bold text-white">Picked Up</span>
+            <span class="text-[11px] text-zinc-400 font-mono-data">Origin Depot</span>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="flex flex-col">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 rounded-full bg-orange-500 text-black font-extrabold flex items-center justify-center text-xs">✓</div>
+              <div class="h-1 flex-grow bg-orange-500 rounded-full"></div>
+            </div>
+            <span class="text-xs font-bold text-white">Arrived Egypt</span>
+            <span class="text-[11px] text-zinc-400 font-mono-data">Cairo Hub (CAI)</span>
+          </div>
+
+          <!-- Step 3 (HELD) -->
+          <div class="flex flex-col">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 rounded-full bg-amber-500 text-black font-extrabold flex items-center justify-center text-xs ring-4 ring-amber-500/40 animate-pulse">!</div>
+              <div class="h-1 flex-grow bg-[#2b3036] rounded-full"></div>
+            </div>
+            <span class="text-xs font-bold text-amber-400">On Hold in Egypt</span>
+            <span class="text-[11px] text-amber-300 font-mono-data">Customs Detained</span>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="flex flex-col">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 rounded-full bg-[#1e2226] text-zinc-500 font-bold flex items-center justify-center text-xs">4</div>
+              <div class="h-1 flex-grow bg-[#2b3036] rounded-full"></div>
+            </div>
+            <span class="text-xs font-medium text-zinc-500">Customs Release</span>
+            <span class="text-[11px] text-zinc-600 font-mono-data">Awaiting Action</span>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="flex flex-col">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 rounded-full bg-[#1e2226] text-zinc-500 font-bold flex items-center justify-center text-xs">5</div>
+            </div>
+            <span class="text-xs font-medium text-zinc-500">Final Delivery</span>
+            <span class="text-[11px] text-zinc-600 font-mono-data">Pending</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Two-Column Grid: Left (Hub Photography & Timeline) & Right (Release Protocol & Specs) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Left Column: Cairo Terminal Visual & Retention Log (7 cols) -->
+      <div class="lg:col-span-7 space-y-6">
+
+        <!-- Cairo Cargo Terminal Visual -->
+        <div class="glass-card rounded-sm overflow-hidden">
+          <div class="relative h-60 sm:h-72 w-full bg-[#181a1d]">
+            <img 
+              src="/images/cairo_cargo_hub.jpg" 
+              alt="Cairo International Airport Air Cargo Customs Terminal 2" 
+              referrerpolicy="no-referrer"
+              class="w-full h-full object-cover object-center filter brightness-90"
+              onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"
+            />
+            <div class="hidden absolute inset-0 bg-gradient-to-tr from-black via-zinc-900 to-amber-950 flex items-center justify-center p-6">
+              <div class="text-center">
+                <span class="text-amber-400 text-3xl font-mono-data font-bold">CAI-T2 CUSTOMS BOND</span>
+                <p class="text-xs text-zinc-400 mt-2 font-mono-data">Inspection Area Bay B-4 &middot; Cairo, Egypt</p>
+              </div>
+            </div>
+            <!-- Overlay Scrim -->
+            <div class="absolute inset-0 bg-gradient-to-t from-[#141618] via-transparent to-black/50"></div>
+            
+            <div class="absolute top-4 left-4 bg-amber-500 text-black px-3 py-1 font-mono-data font-black text-xs uppercase tracking-wider rounded-sm shadow-lg">
+              Official Detention Facility
+            </div>
+
+            <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs">
+              <div class="bg-black/85 backdrop-blur-md px-3 py-1.5 rounded border border-amber-500/40 text-amber-300 font-mono-data font-semibold">
+                Station: Cairo Airport (CAI) Terminal 2 Air Cargo Village
+              </div>
+              <div class="bg-black/85 backdrop-blur-md px-3 py-1.5 rounded border border-zinc-700 text-zinc-300 font-mono-data">
+                Bay B-4 &middot; Bonded Warehouse
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6">
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded bg-amber-500/10 text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+              </div>
+              <div>
+                <h3 class="text-sm font-bold text-white uppercase tracking-wide">Egyptian Customs Authority Formal Retention</h3>
+                <p class="text-xs text-zinc-400 mt-1 leading-relaxed">
+                  The consignment is physically held inside the high-security temperature-controlled bonded room at Cairo Airport. It cannot be loaded onto local courier vehicles until customs declaration ECA-41 is countersigned.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Customs Inspection & Audit Timeline -->
+        <div class="glass-card rounded-sm p-6">
+          <div class="flex items-center justify-between border-b border-[#23272b] pb-4 mb-6">
+            <h2 class="text-base font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              Port & Customs Audit History
+            </h2>
+            <span class="text-xs text-amber-400 font-mono-data font-semibold">Incident State: ON HOLD</span>
+          </div>
+
+          <div class="relative border-l-2 border-amber-500/50 ml-3 space-y-6 text-xs">
+            <!-- Event 1: Formal Hold Issued -->
+            <div class="relative pl-6">
+              <span class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-amber-500 ring-4 ring-[#141618] flex items-center justify-center">
+                <span class="w-1.5 h-1.5 bg-black rounded-full"></span>
+              </span>
+              <div class="flex flex-wrap items-center justify-between gap-1 mb-1">
+                <span class="font-bold text-amber-400 text-sm">Shipment Detained by Egyptian Customs Authority</span>
+                <span class="text-amber-400 font-mono-data font-semibold">Today &middot; 09:15 UTC+2</span>
+              </div>
+              <div class="text-zinc-400 font-mono-data text-[11px] mb-1">Cairo International Airport (CAI), Egypt &middot; Bay B-4</div>
+              <p class="text-zinc-300 leading-relaxed">
+                Automated optical cargo scan flagged package for statutory tariff classification. Inspector Tariq Al-Farouk issued formal retention notice <code class="text-amber-300 bg-black px-1 py-0.5 rounded font-mono-data">EGY-GOV-CUST-883</code>.
+              </p>
+            </div>
+
+            <!-- Event 2: Arrived in Cairo -->
+            <div class="relative pl-6">
+              <span class="absolute -left-[7px] top-1 w-3 h-3 rounded-full bg-zinc-600 ring-4 ring-[#141618]"></span>
+              <div class="flex flex-wrap items-center justify-between gap-1 mb-1">
+                <span class="font-bold text-white text-sm">Arrived at Cairo International Inbound Hub</span>
+                <span class="text-zinc-400 font-mono-data">Yesterday &middot; 18:30 UTC+2</span>
+              </div>
+              <div class="text-zinc-400 font-mono-data text-[11px] mb-1">Cairo Airport Cargo Village &middot; Flight Inward</div>
+              <p class="text-zinc-400 leading-relaxed">
+                Consolidated cargo container offloaded from inbound flight and transferred into import bond transit area.
+              </p>
+            </div>
+
+            <!-- Event 3: Origin Departure -->
+            <div class="relative pl-6">
+              <span class="absolute -left-[7px] top-1 w-3 h-3 rounded-full bg-zinc-600 ring-4 ring-[#141618]"></span>
+              <div class="flex flex-wrap items-center justify-between gap-1 mb-1">
+                <span class="font-bold text-white text-sm">Departed Gateway Airport</span>
+                <span class="text-zinc-400 font-mono-data">Sep 21 &middot; 02:45 CET</span>
+              </div>
+              <div class="text-zinc-400 font-mono-data text-[11px] mb-1">International Transit Hub</div>
+              <p class="text-zinc-400 leading-relaxed">
+                Loaded aboard scheduled cargo flight to Cairo International Airport.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Resolution Instructions, Action Form, Contacts (5 cols) -->
+      <div class="lg:col-span-5 space-y-6">
+
+        <!-- Release Protocol & Required Action Card -->
+        <div class="glass-card rounded-sm p-6 border-t-2 border-t-amber-500">
+          <div class="flex items-center justify-between border-b border-[#23272b] pb-4 mb-4">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono-data">Customs Release Protocol</h3>
+            <span class="px-2 py-0.5 bg-amber-500/20 text-amber-300 rounded text-[10px] font-mono-data uppercase font-semibold">Action Required</span>
+          </div>
+
+          <p class="text-xs text-zinc-300 leading-relaxed mb-4">
+            To lift the hold in Egypt, the designated consignee or clearing representative must submit the mandatory documentation outlined below:
+          </p>
+
+          <div class="space-y-3 text-xs mb-6">
+            <div class="flex items-start gap-2.5 p-2.5 bg-[#0e0f11] rounded border border-[#23272b]">
+              <span class="text-amber-400 font-bold font-mono-data">1.</span>
+              <div class="text-zinc-300">
+                <strong class="text-white">Commercial Invoice with HS Codes</strong>
+                <p class="text-[11px] text-zinc-400 mt-0.5">Itemized valuation of goods for Egyptian customs tariff duties.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-2.5 p-2.5 bg-[#0e0f11] rounded border border-[#23272b]">
+              <span class="text-amber-400 font-bold font-mono-data">2.</span>
+              <div class="text-zinc-300">
+                <strong class="text-white">Consignee Identification</strong>
+                <p class="text-[11px] text-zinc-400 mt-0.5">Copy of National ID / Passport or Egyptian Tax Registration Card.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-2.5 p-2.5 bg-[#0e0f11] rounded border border-[#23272b]">
+              <span class="text-amber-400 font-bold font-mono-data">3.</span>
+              <div class="text-zinc-300">
+                <strong class="text-white">Form ECA-41 Declaration Stamp</strong>
+                <p class="text-[11px] text-zinc-400 mt-0.5">Standard administrative duty assessment fee of EGP 1,450.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Action Buttons -->
+          <div class="space-y-2 no-print">
+            <button id="trigger-docs-modal-btn" class="w-full py-3 bg-orange-500 hover:bg-orange-400 text-black font-extrabold uppercase tracking-wider text-xs rounded-sm transition-colors flex items-center justify-center gap-2 shadow-lg shadow-orange-500/20">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+              Upload Clearance Documents
+            </button>
+
+            <button onclick="simulateReleaseHold()" class="w-full py-2.5 bg-[#1b1e22] hover:bg-[#252a2f] text-emerald-400 hover:text-emerald-300 border border-emerald-600/40 text-xs font-bold uppercase tracking-wider rounded-sm transition-colors flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              Simulate Instant Hold Release &rarr;
+            </button>
+          </div>
+        </div>
+
+        <!-- Official Contact Desk in Cairo -->
+        <div class="glass-card rounded-sm p-6 border-l-4 border-l-orange-500">
+          <h3 class="text-xs font-bold text-white uppercase tracking-wider font-mono-data mb-3">Cairo Customs Desk Contact</h3>
+          <div class="space-y-2 text-xs font-mono-data text-zinc-300">
+            <div class="flex justify-between py-1 border-b border-[#23272b]">
+              <span class="text-zinc-500">Station:</span>
+              <span class="text-white font-semibold">Cairo Cargo Village Terminal 2</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-[#23272b]">
+              <span class="text-zinc-500">Supervising Officer:</span>
+              <span class="text-white font-semibold">Tariq Al-Farouk (ECA-771)</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-[#23272b]">
+              <span class="text-zinc-500">Direct Telephone:</span>
+              <span class="text-orange-400 font-semibold">+20 2 2265 0000 (Ext 4120)</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-[#23272b]">
+              <span class="text-zinc-500">Email Desk:</span>
+              <span class="text-orange-400 font-semibold">clearance-cairo@apex-logistics.eg</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Return to Tracker or In Transit View -->
+        <div class="glass-card rounded-sm p-4 no-print text-center">
+          <p class="text-xs text-zinc-400 mb-3">Looking for consignments in transit?</p>
+          <a href="/#result" class="inline-block px-4 py-2 bg-black border border-orange-500 text-orange-400 font-bold uppercase tracking-wider text-xs rounded hover:bg-orange-500 hover:text-black transition-colors">
+            Check Transit Status &rarr;
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Interactive Document Submission Modal -->
+  <div id="docs-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
+    <div class="bg-[#141618] border border-[#2e3338] w-full max-w-lg rounded-sm p-6 shadow-2xl relative">
+      <div class="flex items-center justify-between border-b border-[#23272b] pb-4 mb-5">
+        <div>
+          <h3 class="text-base font-bold uppercase tracking-wider text-white">Egyptian Customs Document Portal</h3>
+          <p class="text-[11px] text-zinc-400">Terminal 2 Cargo Village Clearance Desk &middot; Case #EGY-GOV-CUST-883</p>
+        </div>
+        <button id="close-docs-modal-btn" class="text-zinc-400 hover:text-white p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form id="docs-submit-form" class="space-y-4 text-xs">
+        <div>
+          <label class="block text-zinc-400 mb-1 font-semibold uppercase">Consignee Full Name / Tax Entity</label>
+          <input type="text" id="doc-consignee" value="Joel Dan (Apex Priority Account)" class="w-full bg-[#0b0c0e] border border-[#2e3338] px-3 py-2 rounded text-white font-mono-data focus:border-orange-500 focus:outline-none" required />
+        </div>
+
+        <div>
+          <label class="block text-zinc-400 mb-1 font-semibold uppercase">Egyptian National ID / Tax ID Number</label>
+          <input type="text" id="doc-id" value="28409180104829" class="w-full bg-[#0b0c0e] border border-[#2e3338] px-3 py-2 rounded text-white font-mono-data focus:border-orange-500 focus:outline-none" required />
+        </div>
+
+        <div>
+          <label class="block text-zinc-400 mb-1 font-semibold uppercase">Commercial Invoice Reference File</label>
+          <div class="border-2 border-dashed border-[#2e3338] hover:border-orange-500 p-4 rounded text-center cursor-pointer bg-[#0b0c0e]">
+            <svg class="w-6 h-6 text-orange-500 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+            <span class="text-zinc-300 font-semibold block">commercial_invoice_DELI08821.pdf</span>
+            <span class="text-[10px] text-zinc-500">File attached and verified (1.4 MB)</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 pt-1">
+          <input type="checkbox" id="doc-confirm" checked class="accent-orange-500 w-4 h-4 rounded" />
+          <label for="doc-confirm" class="text-[11px] text-zinc-300">
+            I certify that the goods meet Egyptian import customs regulations and agree to statutory assessment.
+          </label>
+        </div>
+
+        <div id="docs-feedback" class="hidden p-3 rounded font-mono-data text-xs"></div>
+
+        <div class="pt-2 flex justify-end gap-3">
+          <button type="button" id="cancel-docs-btn" class="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold rounded uppercase">
+            Cancel
+          </button>
+          <button type="submit" class="px-5 py-2 bg-orange-500 hover:bg-orange-400 text-black font-bold rounded uppercase tracking-wider flex items-center gap-2 shadow-md shadow-orange-500/20">
+            <span>Submit to Customs Authority</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="w-full bg-[#0a0b0d] border-t border-[#23272b] py-8 px-4 sm:px-6 lg:px-8 text-xs text-zinc-500 no-print">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+        <span class="text-zinc-400 font-bold uppercase tracking-wider">APEX GLOBAL LOGISTICS &middot; EGYPT DIVISION</span>
+        <span>&middot;</span>
+        <span>Cairo Air Cargo Operations Center</span>
+      </div>
+      <div class="text-zinc-500 font-mono-data">
+        Detention Registry: ECA-CAI-T2
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function getQueryParam(param) {
+      const hash = window.location.hash || '';
+      if (hash.includes('?')) {
+        const hashQuery = hash.split('?')[1];
+        const hashParams = new URLSearchParams(hashQuery);
+        if (hashParams.get(param)) return hashParams.get(param);
+      }
+      const match = hash.match(/#[/]?([A-Za-z0-9_-]+)/);
+      if (match && match[1] && !match[1].startsWith('?') && match[1] !== 'result' && match[1] !== 'track' && match[1] !== 'on-hold') {
+        return match[1];
+      }
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    function simulateReleaseHold() {
+      const code = getQueryParam('code') || 'DELI08821';
+      try {
+        let db = {};
+        const stored = localStorage.getItem('apex_parcels_db');
+        if (stored) db = JSON.parse(stored);
+        
+        if (db[code]) {
+          db[code].status = 'in_transit';
+          db[code].status_label = 'Package is on its way';
+        } else {
+          db[code] = {
+            parcel_id: code,
+            tracking_code: code,
+            service_type: "Apex Priority Air Express",
+            status: "in_transit",
+            status_label: "Package is on its way",
+            origin: { city: "Cairo Gateway", country: "Egypt" },
+            destination: { city: "Destination Hub", country: "Egypt" },
+            estimated_delivery: "Released from Customs - Out for Delivery Tomorrow"
+          };
+        }
+        localStorage.setItem('apex_parcels_db', JSON.stringify(db));
+      } catch (e) {
+        console.error(e);
+      }
+
+      alert(`Customs hold resolved by Officer Tariq Al-Farouk! Consignment ${code} is now RELEASED and ON ITS WAY.`);
+      window.location.href = `/#result?code=${code}`;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const code = getQueryParam('code') || 'DELI08821';
+      document.getElementById('display-tracking-code').textContent = code;
+      document.getElementById('top-code-breadcrumb').textContent = code;
+
+      // Modal Handlers
+      const modal = document.getElementById('docs-modal');
+      const openBtn1 = document.getElementById('open-release-modal-btn');
+      const openBtn2 = document.getElementById('trigger-docs-modal-btn');
+      const closeBtn = document.getElementById('close-docs-modal-btn');
+      const cancelBtn = document.getElementById('cancel-docs-btn');
+      const form = document.getElementById('docs-submit-form');
+      const feedback = document.getElementById('docs-feedback');
+
+      if (openBtn1) openBtn1.addEventListener('click', () => modal.classList.remove('hidden'));
+      if (openBtn2) openBtn2.addEventListener('click', () => modal.classList.remove('hidden'));
+      if (closeBtn) closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+      if (cancelBtn) cancelBtn.addEventListener('click', () => modal.classList.add('hidden'));
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        feedback.classList.remove('hidden');
+        feedback.className = 'p-3 rounded font-mono-data text-xs bg-emerald-950/80 text-emerald-200 border border-emerald-700';
+        feedback.innerHTML = '<strong>Documents Approved:</strong> ECA-41 form submitted to Officer Tariq Al-Farouk. Customs clearance release initiated...';
+
+        setTimeout(() => {
+          simulateReleaseHold();
+        }, 1500);
+      });
+    });
+  </script>
+</body>
+</html>

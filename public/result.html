@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APEXEXPRESS | Consignment Status - Package On Its Way</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #0c0d0e;
+      color: #ffffff;
+    }
+    .font-mono-data {
+      font-family: 'JetBrains Mono', monospace;
+      font-variant-numeric: tabular-nums;
+    }
+    .orange-gradient {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    }
+    .glass-card {
+      background-color: #141618;
+      border: 1px solid #23272b;
+    }
+    @media print {
+      body { background-color: #ffffff; color: #000000; }
+      header, footer, .no-print { display: none !important; }
+      .glass-card { border: 1px solid #cccccc; background: #ffffff !important; color: #000000 !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-orange-500 selection:text-white">
+
+  <!-- Top Bar Contract -->
+  <header class="w-full bg-[#111214] border-b border-[#23272b] sticky top-0 z-50 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+      <a href="track.html" class="flex items-center gap-3 group">
+        <div class="w-9 h-9 orange-gradient rounded-sm flex items-center justify-center font-black text-black text-lg tracking-tighter">
+          ▲
+        </div>
+        <div class="flex flex-col">
+          <span class="text-lg font-extrabold tracking-tight text-white uppercase group-hover:text-orange-400 transition-colors">
+            APEX<span class="text-orange-500">EXPRESS</span>
+          </span>
+          <span class="text-[10px] tracking-widest text-zinc-400 uppercase -mt-1 font-mono-data">GLOBAL COURIER & FREIGHT</span>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-300">
+        <a href="/#track" class="hover:text-orange-400 transition-colors">&larr; New Search</a>
+        <a href="/#result" class="text-orange-400 font-semibold transition-colors">Consignment Result</a>
+        <a href="/#on-hold" class="hover:text-white transition-colors">Egypt Customs Hold Hub</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <button onclick="window.print()" class="px-3.5 py-1.5 bg-[#1b1e22] hover:bg-[#252a2f] text-zinc-200 border border-[#2e3338] text-xs font-semibold rounded-sm transition-colors flex items-center gap-2">
+          <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          Print Waybill
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Viewport -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Breadcrumb & Top Bar -->
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-6 text-xs text-zinc-400 no-print">
+      <div class="flex items-center gap-2">
+        <a href="track.html" class="hover:text-white">Apex Hub</a>
+        <span>/</span>
+        <span>Tracking Manifest</span>
+        <span>/</span>
+        <span class="text-white font-mono-data font-semibold" id="top-code-breadcrumb">DELI01474</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="font-mono-data text-zinc-300">Global Carrier Mesh: Synchronized</span>
+      </div>
+    </div>
+
+    <!-- Master Status Header Banner -->
+    <section class="glass-card rounded-sm p-6 sm:p-8 mb-8 border-l-4 border-l-orange-500 relative overflow-hidden">
+      <!-- Background watermark accent -->
+      <div class="absolute -right-10 -bottom-10 opacity-5 pointer-events-none text-9xl font-black text-orange-500 font-mono-data select-none">
+        DELI
+      </div>
+
+      <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div>
+          <!-- Unboxed metadata with typographic separators -->
+          <div class="flex items-center gap-3 text-xs text-zinc-400 mb-2 font-mono-data">
+            <span class="text-orange-400 font-bold tracking-wider">AIR WAYBILL # <span id="display-tracking-code">DELI01474</span></span>
+            <span aria-hidden="true">&middot;</span>
+            <span>Apex Priority Air Express</span>
+            <span aria-hidden="true">&middot;</span>
+            <span>Flight APX-9481</span>
+          </div>
+
+          <!-- Primary Result Headline -->
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase flex items-center gap-3">
+            <span>Package is on its way</span>
+            <span class="inline-flex items-center justify-center px-3 py-1 bg-orange-500 text-black text-xs font-black rounded-sm uppercase tracking-wider">
+              IN TRANSIT
+            </span>
+          </h1>
+
+          <p class="mt-3 text-sm sm:text-base text-zinc-300 max-w-2xl leading-relaxed" id="status-detail-text">
+            Your parcel is traveling via international air freight aboard flight APX-9481 from Frankfurt Hub to Cairo Delivery Gateway. Customs pre-clearance completed with zero flags.
+          </p>
+        </div>
+
+        <!-- Estimated Delivery Metric Card -->
+        <div class="bg-[#0b0c0e] border border-[#2b3036] p-5 rounded-sm lg:min-w-[280px] shrink-0">
+          <div class="text-[11px] uppercase tracking-wider text-zinc-400 font-semibold">Estimated Arrival</div>
+          <div class="text-2xl font-black text-white mt-1 font-mono-data text-orange-400" id="estimated-date">
+            Sept 26, 2026
+          </div>
+          <div class="text-xs text-zinc-400 mt-0.5 font-mono-data" id="estimated-time">
+            Target Window: 14:00 &ndash; 18:30 EEST
+          </div>
+          <div class="mt-3 pt-3 border-t border-[#23272b] flex items-center justify-between text-[11px] font-mono-data text-zinc-400">
+            <span>Route Transit:</span>
+            <span class="text-emerald-400 font-bold">On Schedule</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Multi-Stage Progress Stepper -->
+      <div class="mt-8 pt-6 border-t border-[#23272b]">
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+          <!-- Stage 1 -->
+          <div class="flex flex-col">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 rounded-full bg-orange-500 text-black font-extrabold flex items-center justify-center text-xs">✓</div>
+              <div class="h-1 flex-grow bg-orange-500 rounded-full"></div>
+            </div>
+            <span class="text-xs font-bold text-white">Picked Up</span>
+            <span class="text-[11px] text-zinc-400 font-mono-data">Sept 21, 14:15</span>
+          </div>
+
+          <!-- Stage 2 -->
+          <div class="flex flex-col">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 rounded-full bg-orange-500 text-black font-extrabold flex items-center justify-center text-xs">✓</div>
+              <div class="h-1 flex-grow bg-orange-500 rounded-full"></div>
+            </div>
+            <span class="text-xs font-bold text-white">Export Customs</span>
+            <span class="text-[11px] text-zinc-400 font-mono-data">Cleared FRA</span>
+          </div>
+
+          <!-- Stage 3 (Active) -->
+          <div class="flex flex-col">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 rounded-full bg-orange-500 text-black font-extrabold flex items-center justify-center text-xs ring-4 ring-orange-500/30 animate-pulse">●</div>
+              <div class="h-1 flex-grow bg-[#2b3036] rounded-full"></div>
+            </div>
+            <span class="text-xs font-bold text-orange-400">In Air Transit</span>
+            <span class="text-[11px] text-orange-300 font-mono-data">Flight APX-9481</span>
+          </div>
+
+          <!-- Stage 4 -->
+          <div class="flex flex-col">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 rounded-full bg-[#1e2226] text-zinc-500 font-bold flex items-center justify-center text-xs">4</div>
+              <div class="h-1 flex-grow bg-[#2b3036] rounded-full"></div>
+            </div>
+            <span class="text-xs font-medium text-zinc-400">Import Clearance</span>
+            <span class="text-[11px] text-zinc-500 font-mono-data">Pending Landing</span>
+          </div>
+
+          <!-- Stage 5 -->
+          <div class="flex flex-col">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 rounded-full bg-[#1e2226] text-zinc-500 font-bold flex items-center justify-center text-xs">5</div>
+            </div>
+            <span class="text-xs font-medium text-zinc-400">Final Delivery</span>
+            <span class="text-[11px] text-zinc-500 font-mono-data">Sept 26</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Two-Column Operational Details -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Left Column: Flight Visual & Milestone Timeline (7 cols) -->
+      <div class="lg:col-span-7 space-y-6">
+
+        <!-- Active Transit Aircraft Spotlight Card with Generated Image -->
+        <div class="glass-card rounded-sm overflow-hidden">
+          <div class="relative h-56 sm:h-64 w-full bg-[#181a1d]">
+            <img 
+              src="/images/logistics_cargo_plane.jpg" 
+              alt="Apex Air Freight Cargo Plane in Transit" 
+              referrerpolicy="no-referrer"
+              class="w-full h-full object-cover object-center filter brightness-90"
+              onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"
+            />
+            <div class="hidden absolute inset-0 bg-gradient-to-tr from-black via-zinc-900 to-orange-950 flex items-center justify-center p-6">
+              <div class="text-center">
+                <span class="text-orange-500 text-3xl font-mono-data">✈ APX-9481</span>
+                <p class="text-xs text-zinc-400 mt-2 font-mono-data">Transponder Flight Telemetry Active</p>
+              </div>
+            </div>
+            <!-- Overlay Scrim -->
+            <div class="absolute inset-0 bg-gradient-to-t from-[#141618] via-transparent to-black/40"></div>
+            
+            <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs">
+              <div class="bg-black/80 backdrop-blur-md px-3 py-1.5 rounded border border-orange-500/40 text-orange-400 font-mono-data font-semibold">
+                Cruising Altitude: FL380 &middot; 890 km/h
+              </div>
+              <div class="bg-black/80 backdrop-blur-md px-3 py-1.5 rounded border border-zinc-700 text-zinc-300 font-mono-data">
+                ULD-APX-9941B (Secure)
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6">
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">
+              <div>
+                <span class="text-zinc-500 block uppercase font-semibold text-[10px]">Origin Gateway</span>
+                <span class="text-white font-bold text-sm block mt-0.5">Frankfurt, Germany</span>
+                <span class="text-zinc-400 font-mono-data text-[11px]">FRA / Hub Cargo Terminal 4</span>
+              </div>
+              <div>
+                <span class="text-zinc-500 block uppercase font-semibold text-[10px]">Destination Port</span>
+                <span class="text-white font-bold text-sm block mt-0.5">Cairo, Egypt</span>
+                <span class="text-zinc-400 font-mono-data text-[11px]">CAI / Air Cargo Village</span>
+              </div>
+              <div>
+                <span class="text-zinc-500 block uppercase font-semibold text-[10px]">Air Waybill Service</span>
+                <span class="text-orange-400 font-bold text-sm block mt-0.5 font-mono-data">Priority Express Air</span>
+                <span class="text-zinc-400 text-[11px]">Direct Transit Vector</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tracking Milestone Timeline -->
+        <div class="glass-card rounded-sm p-6">
+          <div class="flex items-center justify-between border-b border-[#23272b] pb-4 mb-6">
+            <h2 class="text-base font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Milestone Audit Trail
+            </h2>
+            <span class="text-xs text-zinc-400 font-mono-data">UTC Timestamp Log</span>
+          </div>
+
+          <div class="relative border-l-2 border-orange-500/40 ml-3 space-y-6 text-xs">
+            <!-- Event 1: In Flight (Latest) -->
+            <div class="relative pl-6">
+              <span class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-orange-500 ring-4 ring-[#141618] flex items-center justify-center">
+                <span class="w-1.5 h-1.5 bg-black rounded-full"></span>
+              </span>
+              <div class="flex flex-wrap items-center justify-between gap-1 mb-1">
+                <span class="font-bold text-white text-sm">In Air Transit &mdash; En Route</span>
+                <span class="text-orange-400 font-mono-data font-semibold">Today &middot; 07:15 UTC</span>
+              </div>
+              <div class="text-zinc-400 font-mono-data text-[11px] mb-1">Airspace Mediterranean Corridor &middot; Flight APX-9481</div>
+              <p class="text-zinc-300 leading-relaxed">
+                Aircraft cruising altitude FL380. Package secured in container ULD-APX-9941B. Radar telemetry healthy. Delivery scheduled as planned.
+              </p>
+            </div>
+
+            <!-- Event 2: Loaded Frankfurt -->
+            <div class="relative pl-6">
+              <span class="absolute -left-[7px] top-1 w-3 h-3 rounded-full bg-zinc-600 ring-4 ring-[#141618]"></span>
+              <div class="flex flex-wrap items-center justify-between gap-1 mb-1">
+                <span class="font-bold text-white text-sm">Loaded into Air Freight Container</span>
+                <span class="text-zinc-400 font-mono-data">Today &middot; 04:30 CET</span>
+              </div>
+              <div class="text-zinc-400 font-mono-data text-[11px] mb-1">Frankfurt Airport (FRA), Germany</div>
+              <p class="text-zinc-400 leading-relaxed">
+                Pallet scanned into air manifest APX-9481 by Ground Cargo Ops. Container locked and sealed.
+              </p>
+            </div>
+
+            <!-- Event 3: Export Customs Cleared -->
+            <div class="relative pl-6">
+              <span class="absolute -left-[7px] top-1 w-3 h-3 rounded-full bg-zinc-600 ring-4 ring-[#141618]"></span>
+              <div class="flex flex-wrap items-center justify-between gap-1 mb-1">
+                <span class="font-bold text-white text-sm">Export Customs Cleared</span>
+                <span class="text-zinc-400 font-mono-data">Sept 21 &middot; 21:40 CET</span>
+              </div>
+              <div class="text-zinc-400 font-mono-data text-[11px] mb-1">Frankfurt Cargo Gateway, Germany</div>
+              <p class="text-zinc-400 leading-relaxed">
+                Customs export declaration verified and approved. Commercial manifest signed by Officer FRA-CUST-12.
+              </p>
+            </div>
+
+            <!-- Event 4: Picked Up -->
+            <div class="relative pl-6">
+              <span class="absolute -left-[7px] top-1 w-3 h-3 rounded-full bg-zinc-600 ring-4 ring-[#141618]"></span>
+              <div class="flex flex-wrap items-center justify-between gap-1 mb-1">
+                <span class="font-bold text-white text-sm">Shipment Collected from Consignor</span>
+                <span class="text-zinc-400 font-mono-data">Sept 21 &middot; 14:15 CET</span>
+              </div>
+              <div class="text-zinc-400 font-mono-data text-[11px] mb-1">Technik Logistics Depot, Frankfurt</div>
+              <p class="text-zinc-400 leading-relaxed">
+                Consignment picked up by Apex courier unit. Barcode DELI01474 registered on global logistics network.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Consignment Specs, Waybill Details, Actions (5 cols) -->
+      <div class="lg:col-span-5 space-y-6">
+
+        <!-- Consignment Waybill Specifications -->
+        <div class="glass-card rounded-sm p-6 border-t-2 border-t-orange-500">
+          <div class="flex items-center justify-between border-b border-[#23272b] pb-4 mb-4">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono-data">Waybill Specifications</h3>
+            <span class="px-2 py-0.5 bg-orange-500/10 text-orange-400 rounded text-[10px] font-mono-data uppercase font-semibold">Priority Tier-1</span>
+          </div>
+
+          <dl class="divide-y divide-[#23272b] text-xs font-mono-data">
+            <div class="py-2.5 flex justify-between">
+              <dt class="text-zinc-400">Gross Weight:</dt>
+              <dd class="text-white font-semibold">4.85 kg (10.69 lbs)</dd>
+            </div>
+            <div class="py-2.5 flex justify-between">
+              <dt class="text-zinc-400">Dimensions:</dt>
+              <dd class="text-white font-semibold">34 &times; 22 &times; 15 cm</dd>
+            </div>
+            <div class="py-2.5 flex justify-between">
+              <dt class="text-zinc-400">Pieces / Colli:</dt>
+              <dd class="text-white font-semibold">1 Parcel</dd>
+            </div>
+            <div class="py-2.5 flex justify-between">
+              <dt class="text-zinc-400">Declared Value:</dt>
+              <dd class="text-orange-400 font-bold">$1,250.00 USD</dd>
+            </div>
+            <div class="py-2.5 flex justify-between">
+              <dt class="text-zinc-400">Signature Required:</dt>
+              <dd class="text-emerald-400 font-semibold">Yes (ID Verification)</dd>
+            </div>
+            <div class="py-2.5 flex justify-between">
+              <dt class="text-zinc-400">Cargo Insurance:</dt>
+              <dd class="text-white font-semibold">Full Comprehensive</dd>
+            </div>
+          </dl>
+
+          <!-- Sender & Recipient Blocks -->
+          <div class="mt-6 pt-4 border-t border-[#23272b] space-y-4">
+            <div class="bg-[#0e0f11] p-3 rounded-sm border border-[#23272b]">
+              <span class="text-[10px] text-zinc-500 uppercase font-bold tracking-wider block mb-1">Shipper (Consignor)</span>
+              <div class="text-xs font-bold text-white">Technik Precision GmbH</div>
+              <div class="text-[11px] text-zinc-400">Industriepark Ost 44, Frankfurt am Main, Germany</div>
+            </div>
+
+            <div class="bg-[#0e0f11] p-3 rounded-sm border border-[#23272b]">
+              <span class="text-[10px] text-orange-400 uppercase font-bold tracking-wider block mb-1">Consignee (Recipient)</span>
+              <div class="text-xs font-bold text-white">Joel Dan (Apex Priority Recipient)</div>
+              <div class="text-[11px] text-zinc-400">MetroTech Logistics Park, New Cairo &middot; Egypt</div>
+            </div>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="mt-6 space-y-2 no-print">
+            <button onclick="shareTracking()" class="w-full py-2.5 bg-[#1b1e22] hover:bg-[#252a2f] text-white text-xs font-bold uppercase tracking-wider rounded-sm border border-[#2e3338] transition-colors flex items-center justify-center gap-2">
+              <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+              <span id="copy-btn-text">Copy Tracking Link</span>
+            </button>
+            <a href="track.html" class="w-full py-2.5 bg-orange-500 hover:bg-orange-400 text-black text-xs font-black uppercase tracking-wider rounded-sm transition-colors flex items-center justify-center gap-2">
+              Track Another Package
+            </a>
+          </div>
+        </div>
+
+        <!-- Demonstration Notice: Egypt Hold Reference -->
+        <div class="glass-card rounded-sm p-5 border-l-4 border-l-amber-500 no-print">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded bg-amber-500/10 text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div class="text-xs">
+              <h4 class="font-bold text-white uppercase tracking-wider">Egypt Customs Station</h4>
+              <p class="text-zinc-400 mt-1 leading-relaxed">
+                Access official Egyptian Customs Authority quarantine & holding clearance center:
+              </p>
+              <div class="mt-3 flex items-center gap-2">
+                <a href="/#on-hold?code=DELI08821" class="px-3 py-1.5 bg-black border border-amber-500/60 hover:border-amber-400 text-amber-300 font-semibold rounded font-mono-data text-[11px] transition-colors">
+                  View Egypt Customs Hold Portal &rarr;
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full bg-[#0a0b0d] border-t border-[#23272b] py-8 px-4 sm:px-6 lg:px-8 text-xs text-zinc-500 no-print">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+        <span class="text-zinc-400 font-bold uppercase tracking-wider">APEX AIRWAYS GLOBAL FREIGHT</span>
+        <span>&middot;</span>
+        <span>Flight APX-9481 Transit Monitor</span>
+      </div>
+      <div class="text-zinc-500 font-mono-data">
+        System ID: FRA-CAI-2026
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function getQueryParam(param) {
+      // Check clean hash: #result?code=... or #code=... or direct #DELI01474
+      const hash = window.location.hash || '';
+      if (hash.includes('?')) {
+        const hashQuery = hash.split('?')[1];
+        const hashParams = new URLSearchParams(hashQuery);
+        if (hashParams.get(param)) return hashParams.get(param);
+      }
+      const match = hash.match(/#[/]?([A-Za-z0-9_-]+)/);
+      if (match && match[1] && !match[1].startsWith('?') && match[1] !== 'result' && match[1] !== 'track' && match[1] !== 'on-hold') {
+        return match[1];
+      }
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    function shareTracking() {
+      const url = window.location.origin + '/#result?code=' + (getQueryParam('code') || 'DELI01474');
+      navigator.clipboard.writeText(url).then(() => {
+        const btnText = document.getElementById('copy-btn-text');
+        btnText.textContent = 'Link Copied!';
+        setTimeout(() => {
+          btnText.textContent = 'Copy Tracking Link';
+        }, 2000);
+      });
+    }
+
+    // Dynamic loading from local database or query param
+    document.addEventListener('DOMContentLoaded', () => {
+      const code = getQueryParam('code') || 'DELI01474';
+      document.getElementById('display-tracking-code').textContent = code;
+      document.getElementById('top-code-breadcrumb').textContent = code;
+
+      try {
+        const stored = localStorage.getItem('apex_parcels_db');
+        if (stored) {
+          const db = JSON.parse(stored);
+          const p = db[code];
+          if (p && p.status === 'on_hold') {
+            // If this parcel was set to on_hold, offer quick redirect
+            window.location.href = `/#on-hold?code=${code}`;
+          }
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    });
+  </script>
+</body>
+</html>
